@@ -1,0 +1,25 @@
+package com.dq408.kindergarten.utils;
+/**
+ * 响应状态码类
+ * @author XIE_HRZGZ
+ * */
+public interface StateCode {
+
+    //成功
+    Integer SUCCEED = 408;
+
+
+
+
+    //账号错误
+    Integer ACCOUNT_ERR = 101;
+    //密码错误
+    Integer PASSWORD_ERR = 102;
+    //验证码错误
+    Integer CAPTCHA_ERR = 103;
+
+
+    //失败
+    Integer FAIL = 201;
+
+}

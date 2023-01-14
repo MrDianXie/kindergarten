@@ -8,9 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="kindergarten-admin-web" />
-        <module name="kindergarten" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kindergarten" target="8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

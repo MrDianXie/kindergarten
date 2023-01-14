@@ -1,2 +1,19 @@
 server:
   port: 8090
+
+
+
+
+
+#配置数据源
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/kindergarten?characterEncoding=UTF-8&serverTimezone=UTC"
+    username: ENC(4rcNB4MLQQxgxGj6p/Hs/w==)
+    password: ENC(oOToGTZ3DRGE08RNrjqgdg==)
+
+#配置jasypt
+jasypt:
+ encryptor:
+  password: "xjhsdaw123@#$"
+
