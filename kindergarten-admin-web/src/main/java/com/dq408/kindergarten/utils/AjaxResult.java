@@ -34,4 +34,5 @@ public class AjaxResult {
         return result;
     }
 
+
 }

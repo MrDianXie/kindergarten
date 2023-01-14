@@ -17,6 +17,8 @@ public interface StateCode {
     Integer PASSWORD_ERR = 102;
     //验证码错误
     Integer CAPTCHA_ERR = 103;
+    //角色有误
+    Integer ROLE_ERR = 301;
 
 
     //失败
