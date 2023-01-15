@@ -41,15 +41,18 @@ public class LoginUtil {
                 return  AjaxResult.fail(StateCode.ROLE_ERR,"用户信息错误");
             }
 
-
+            /** 登录成功 */
             HashMap<String,Object> data = new HashMap<>();
+            HashMap<String,Object> userInfo = new HashMap<>();
+            userInfo.put("avatar",user.getAvatar());
+            userInfo.put("username", user.getUsername());
             data.put("token", JwtUtil.getToken(user.getUsername(), TokenPassword.USER_TOKEN));
-            data.put("avatar",user.getAvatar());
-            data.put("username",user.getUsername());
+            data.put("userInfo",userInfo);
             return AjaxResult.success(data);
         }
 
     }
+
 
 
 

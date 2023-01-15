@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author XieJinHong
- * @since 2023-01-14
+ * @since 2023-01-16
  */
 public class User implements Serializable {
 
@@ -217,21 +217,21 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-        "uid=" + uid +
-        ", username=" + username +
-        ", avatar=" + avatar +
-        ", mnemonic_code=" + mnemonic_code +
-        ", password=" + password +
-        ", gander=" + gander +
-        ", phone=" + phone +
-        ", email=" + email +
-        ", roleid=" + roleid +
-        ", create_time=" + create_time +
-        ", update_time=" + update_time +
-        ", yl1=" + yl1 +
-        ", yl2=" + yl2 +
-        ", yl3=" + yl3 +
-        ", yl4=" + yl4 +
-        "}";
+                "uid=" + uid +
+                ", username=" + username +
+                ", avatar=" + avatar +
+                ", mnemonic_code=" + mnemonic_code +
+                ", password=" + password +
+                ", gander=" + gander +
+                ", phone=" + phone +
+                ", email=" + email +
+                ", roleid=" + roleid +
+                ", create_time=" + create_time +
+                ", update_time=" + update_time +
+                ", yl1=" + yl1 +
+                ", yl2=" + yl2 +
+                ", yl3=" + yl3 +
+                ", yl4=" + yl4 +
+                "}";
     }
 }
