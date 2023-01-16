@@ -39,8 +39,6 @@ public class LoginController {
         //生成一个验证码的图片，设置宽高，验证码随机的位数
         LineCaptcha verCode = new LineCaptcha(120,40,4,50);
         //获取验证码
-        String path = this.getClass().getClassLoader().getResource("").getPath();//注意getResource("")里面是空字符串
-        System.out.println(path);
         code = verCode.getCode();
         System.out.println(code);
         //将验证码图片响应回浏览器
