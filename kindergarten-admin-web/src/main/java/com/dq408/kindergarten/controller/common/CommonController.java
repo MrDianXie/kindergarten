@@ -35,4 +35,7 @@ public class CommonController {
         StreamUtils.copy(classPathResource.getInputStream(), response.getOutputStream());
 
     }
+
+
+
 }

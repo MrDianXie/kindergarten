@@ -1,17 +1,18 @@
 package com.dq408.kindergarten.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author XieJinHong
- * @since 2023-01-16
+ * @since 2023-01-19
  */
 public class User implements Serializable {
 
@@ -36,7 +37,7 @@ public class User implements Serializable {
     /**
      * 用户助记码
      */
-    private String mnemonic_code;
+    private String mnemonicCode;
 
     /**
      * 密码
@@ -66,12 +67,12 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
     /**
      * 预留
@@ -118,12 +119,12 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getMnemonic_code() {
-        return mnemonic_code;
+    public String getMnemonicCode() {
+        return mnemonicCode;
     }
 
-    public void setMnemonic_code(String mnemonic_code) {
-        this.mnemonic_code = mnemonic_code;
+    public void setMnemonicCode(String mnemonicCode) {
+        this.mnemonicCode = mnemonicCode;
     }
 
     public String getPassword() {
@@ -166,20 +167,20 @@ public class User implements Serializable {
         this.roleid = roleid;
     }
 
-    public LocalDateTime getCreate_time() {
-        return create_time;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(LocalDateTime create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdate_time() {
-        return update_time;
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdate_time(LocalDateTime update_time) {
-        this.update_time = update_time;
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getYl1() {
@@ -217,21 +218,21 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "uid=" + uid +
-                ", username=" + username +
-                ", avatar=" + avatar +
-                ", mnemonic_code=" + mnemonic_code +
-                ", password=" + password +
-                ", gander=" + gander +
-                ", phone=" + phone +
-                ", email=" + email +
-                ", roleid=" + roleid +
-                ", create_time=" + create_time +
-                ", update_time=" + update_time +
-                ", yl1=" + yl1 +
-                ", yl2=" + yl2 +
-                ", yl3=" + yl3 +
-                ", yl4=" + yl4 +
-                "}";
+        "uid=" + uid +
+        ", username=" + username +
+        ", avatar=" + avatar +
+        ", mnemonicCode=" + mnemonicCode +
+        ", password=" + password +
+        ", gander=" + gander +
+        ", phone=" + phone +
+        ", email=" + email +
+        ", roleid=" + roleid +
+        ", updateTime=" + updateTime +
+        ", updateTime=" + updateTime +
+        ", yl1=" + yl1 +
+        ", yl2=" + yl2 +
+        ", yl3=" + yl3 +
+        ", yl4=" + yl4 +
+        "}";
     }
 }

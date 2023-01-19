@@ -22,9 +22,9 @@ public class Generator {
 
         //3.设置全局配置
         GlobalConfig globalConfig = new GlobalConfig();
+        globalConfig.setOutputDir("D:\\BC\\JAVA\\SourceCode\\Project\\翻斗幼儿园数字化信息管理平台2.0\\后端API\\kindergarten\\kindergarten-admin-web\\src\\main\\java\\com\\dq408\\kindergarten");
         //设置生成完毕后是否打开生成代码所在的目录
-        globalConfig.setOutputDir("");
-        globalConfig.setOpen(false);
+        globalConfig.setOpen(true);
         //设置作者
         globalConfig.setAuthor("XieJinHong");
         //设置是否覆盖原始生成的文件
@@ -45,22 +45,6 @@ public class Generator {
         //设置数据层包名
         autoGenerator.setPackageInfo(packageInfo);
 
-        //5.策略设置
-//        StrategyConfig strategyConfig = new StrategyConfig();
-        //设置当前需要生成的表名，参数为可变参数,不写则生成整个数据库的表代码
-//        strategyConfig.setInclude("user");
-        // 设置数据表的前缀名称，块名 = 数据库表名 _ 前名,如果有该前缀,生成代码时会去去除
-//        strategyConfig.setTablePrefix("tbl_");
-        // 设置是否启用Rest风格
-//        strategyConfig.setRestControllerStyle(true);
-        // 设置乐观锁字段名
-//        strategyConfig.setVersionFieldName("version");
-        // 设置逻辑删除字段名
-//        strategyConfig.setLogicDeleteFieldName("deleted");
-        // 设置是否启用Lombok
-//        strategyConfig.setEntityLombokModel(true);
-//        autoGenerator.setStrategy(strategyConfig);
-        //6.执行生成操作
         autoGenerator.execute();
     }
 }
