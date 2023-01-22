@@ -2,7 +2,6 @@ package com.dq408.kindergarten.utils;
 
 import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.utils.jwt.JwtUtil;
-import com.dq408.kindergarten.utils.jwt.TokenPassword;
 import com.dq408.kindergarten.vo.LoginInfoVo;
 
 import java.util.HashMap;
@@ -46,7 +45,8 @@ public class LoginUtil {
             HashMap<String,Object> userInfo = new HashMap<>();
             userInfo.put("avatar",user.getAvatar());
             userInfo.put("username", user.getUsername());
-            data.put("token", JwtUtil.getToken(user.getUsername(), TokenPassword.USER_TOKEN));
+            System.out.println(user.getUid().longValue());
+            data.put("token", JwtUtil.getToken(user.getUid()));
             data.put("userInfo",userInfo);
             return AjaxResult.success(data);
         }

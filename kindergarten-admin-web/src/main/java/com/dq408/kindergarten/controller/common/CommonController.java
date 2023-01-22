@@ -1,16 +1,22 @@
 package com.dq408.kindergarten.controller.common;
 
-import org.apache.ibatis.annotations.Param;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.dq408.kindergarten.domain.User;
+import com.dq408.kindergarten.service.UserService;
+import com.dq408.kindergarten.utils.AjaxResult;
+import com.dq408.kindergarten.utils.StateCode;
+import com.dq408.kindergarten.utils.jwt.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * CommonController
@@ -20,6 +26,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/admin/home")
 public class CommonController {
+
+    @Autowired
+    private UserService userService;
 
 
     /**
@@ -34,6 +43,39 @@ public class CommonController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(classPathResource.getInputStream(), response.getOutputStream());
 
+    }
+
+
+    /**
+     *
+     * @param token
+     * @return Map
+     */
+    @PostMapping("/whoAmI")
+    public Map<String,Object> whoAmI(@RequestHeader("X-Admin-Token") String token){
+        //解析token
+        Long userId = JwtUtil.passToken(token);
+        //判断token是否有效
+        if (userId == 0){//无效
+            return AjaxResult.fail(StateCode.TOKEN_ERR,"token无效");
+        } else {//有效
+            User user = userService.getOne(new QueryWrapper<User>()
+                    .eq("uid", userId)
+            );
+
+            //通过用户id查询该用户
+            if (user != null){//用户存在
+                //构造用户信息返回
+                Map<String,Object> userInfo = new HashMap<>();
+
+                userInfo.put("username",user.getUsername());
+                userInfo.put("avatar",user.getAvatar());
+
+                return AjaxResult.success(userInfo);
+            } else {
+                return AjaxResult.fail();
+            }
+        }
     }
 
 

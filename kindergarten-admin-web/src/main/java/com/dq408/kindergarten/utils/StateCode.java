@@ -23,5 +23,6 @@ public interface StateCode {
 
     //失败
     Integer FAIL = 201;
+    Integer TOKEN_ERR = 208;
 
 }

@@ -7,7 +7,6 @@ import com.dq408.kindergarten.utils.LoginUtil;
 import com.dq408.kindergarten.vo.LoginInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.dq408.kindergarten.utils.jwt.annotation.*;
 
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,14 +54,12 @@ public class LoginController {
      * @param loginInfoVo
      * @return
      */
-    @PassToken
     @PostMapping("/login")
     public Map<String,Object> login(@RequestBody LoginInfoVo loginInfoVo){
         User user = userService.getOne(new QueryWrapper<User>()
                 .eq("username",loginInfoVo.getUsername())
                 .eq("mnemonic_code",loginInfoVo.getUsername())
         );
-
         //判断账号密码是否正确
         return LoginUtil.verifyUserInfo(user,code,loginInfoVo);
     }
