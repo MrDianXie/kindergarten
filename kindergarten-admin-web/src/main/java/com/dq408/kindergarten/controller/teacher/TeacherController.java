@@ -6,7 +6,6 @@ import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.RoleService;
 import com.dq408.kindergarten.service.UserService;
 import com.dq408.kindergarten.utils.AjaxResult;
-import com.dq408.kindergarten.vo.TeacherListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +22,8 @@ import java.util.Map;
 public class TeacherController {
 
 
+
+
     //自动注入教师service
     @Autowired
     private UserService userService;
@@ -32,17 +33,16 @@ public class TeacherController {
     private RoleService roleService;
 
 
+
     /**
      * 获取所有老师的信息
      * @return Map<String, Object>
      */
     @GetMapping("/teacherList")
     public Map<String, Object> getTeacherList(){
-        //先查询出教师的角色id
-        Role role = roleService.getOne(new QueryWrapper<Role>().eq("rname", "老师"));
         //查询教师列表
         List<User> list = userService.list(new QueryWrapper<User>()
-            .eq("roleid",role.getRid())
+            .eq("roleid",getRoleId())
         );
 
         return AjaxResult.success(list);
@@ -50,26 +50,29 @@ public class TeacherController {
 
     /**
      * 通过用户名查询教师
-     * @param teacherListVo
+     * @param selectKey
      * @return Map<String, Object>
      */
-    @PostMapping("/selectByName")
-    public Map<String, Object> selectByName(@RequestBody TeacherListVo teacherListVo){
+    @PostMapping("/selectTeacher")
+    public Map<String, Object> selectByName(String selectKey){
 
+        System.out.println(getRoleId());
+        System.out.println(selectKey);
 
-        System.out.println(teacherListVo.getSelectKey());
-        System.out.println(teacherListVo.getUid());
         List<User> list = userService.list(new QueryWrapper<User>()
-                .and(i -> i.like("username",teacherListVo.getSelectKey())
-                        .or()
-                        .like("uid",teacherListVo.getUid())
-                        .or()
-                        .like("mnemonic_code",teacherListVo.getSelectKey())
-                        .or()
-                        .like("phone",teacherListVo.getSelectKey())
-                ).eq("roleid",1)
+            .and(i -> i.like("username", selectKey == null ? "" : selectKey)
+                    .or()
+                    .like("mnemonic_code", selectKey == null ? "" : selectKey)
+                    .or()
+                    .like("phone", selectKey == null ? "" : selectKey)
+            ).eq("roleid", getRoleId())
 
         );
-        return AjaxResult.success(list);
+            return AjaxResult.success(list);
+
+    }
+
+    private Long getRoleId(){
+        return roleService.getOne(new QueryWrapper<Role>().eq("rname", "老师")).getRid();
     }
 }

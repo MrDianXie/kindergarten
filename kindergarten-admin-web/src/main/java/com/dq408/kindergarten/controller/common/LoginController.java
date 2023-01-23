@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.UserService;
 import com.dq408.kindergarten.utils.LoginUtil;
+import com.dq408.kindergarten.utils.jwt.anntation.PassToken;
 import com.dq408.kindergarten.vo.LoginInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class LoginController {
 
 
 
+    @PassToken
     @GetMapping ("/verifyCode")
     public void getVerCode(HttpServletResponse response) throws IOException {
         //生成一个验证码的图片，设置宽高，验证码随机的位数
@@ -54,6 +56,7 @@ public class LoginController {
      * @param loginInfoVo
      * @return
      */
+    @PassToken
     @PostMapping("/login")
     public Map<String,Object> login(@RequestBody LoginInfoVo loginInfoVo){
         User user = userService.getOne(new QueryWrapper<User>()

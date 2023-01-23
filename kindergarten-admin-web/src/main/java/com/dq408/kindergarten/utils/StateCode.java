@@ -23,6 +23,9 @@ public interface StateCode {
 
     //失败
     Integer FAIL = 201;
-    Integer TOKEN_ERR = 208;
+    Integer TOKEN_ISNULL = 208;
+    Integer TOKEN_USER_ISNUll = 209;
+    Integer TOKEN_OVERDUE = 210;
+
 
 }

@@ -7,6 +7,8 @@ import com.dq408.kindergarten.service.UserService;
 import com.dq408.kindergarten.utils.AjaxResult;
 import com.dq408.kindergarten.utils.StateCode;
 import com.dq408.kindergarten.utils.jwt.JwtUtil;
+import com.dq408.kindergarten.utils.jwt.anntation.PassToken;
+import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -37,6 +39,7 @@ public class CommonController {
      * @param username
      * @throws IOException
      */
+    @PassToken
     @GetMapping("/getAvatar")
     public void getAvatar(HttpServletResponse response,String username) throws IOException {
         ClassPathResource classPathResource = new ClassPathResource("/useravatar/" +username + ".png");
@@ -51,31 +54,36 @@ public class CommonController {
      * @param token
      * @return Map
      */
+    @UserLoginToken
     @PostMapping("/whoAmI")
     public Map<String,Object> whoAmI(@RequestHeader("X-Admin-Token") String token){
-        //解析token
-        Long userId = JwtUtil.passToken(token);
-        //判断token是否有效
-        if (userId == 0){//无效
-            return AjaxResult.fail(StateCode.TOKEN_ERR,"token无效");
-        } else {//有效
-            User user = userService.getOne(new QueryWrapper<User>()
-                    .eq("uid", userId)
-            );
 
-            //通过用户id查询该用户
-            if (user != null){//用户存在
-                //构造用户信息返回
-                Map<String,Object> userInfo = new HashMap<>();
+        return null;
 
-                userInfo.put("username",user.getUsername());
-                userInfo.put("avatar",user.getAvatar());
+//            //解析token
+//            Long userId = JwtUtil.passToken(token);
+//            //判断token是否有效
+//            if (userId == 0) {//无效
+//                return AjaxResult.fail(StateCode.TOKEN_OVERDUE, "token无效");
+//            } else {//有效
+//                User user = userService.getOne(new QueryWrapper<User>()
+//                        .eq("uid", userId)
+//                );
+//
+//                //通过用户id查询该用户
+//                if (user != null) {//用户存在
+//                    //构造用户信息返回
+//                    Map<String, Object> userInfo = new HashMap<>();
+//
+//                    userInfo.put("username", user.getUsername());
+//                    userInfo.put("avatar", user.getAvatar());
+//
+//                    return AjaxResult.success(userInfo);
+//                } else {
+//                    return AjaxResult.fail();
+//                }
+//            }
 
-                return AjaxResult.success(userInfo);
-            } else {
-                return AjaxResult.fail();
-            }
-        }
     }
 
 

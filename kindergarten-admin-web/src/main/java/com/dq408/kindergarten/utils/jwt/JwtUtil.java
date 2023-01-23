@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import java.util.*;
 
 public class JwtUtil {
@@ -31,7 +30,7 @@ public class JwtUtil {
             Map<String, Object> map = new HashMap<String, Object>();
             Date nowDate = new Date();
             // 过期时间：2小时
-            Date expireDate = getAfterDate(nowDate,0,0,0,2,0,0);
+            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,0);
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()
@@ -71,8 +70,8 @@ public class JwtUtil {
             Claim claim = claims.get("userId");
             return claim.asLong();
         } catch (JWTVerificationException exception){
-            System.out.println("JWT异常");
-//			exception.printStackTrace();
+//            System.out.println("JWT异常");
+			exception.printStackTrace();
         }
         return 0L;
     }
@@ -105,6 +104,8 @@ public class JwtUtil {
         }
         return cal.getTime();
     }
+
+
 
 }
 
