@@ -23,9 +23,14 @@ public interface StateCode {
 
     //失败
     Integer FAIL = 201;
+    //token为null
     Integer TOKEN_ISNULL = 208;
+    //该token查询不到对应用户
     Integer TOKEN_USER_ISNUll = 209;
+    //token验证失败
     Integer TOKEN_OVERDUE = 210;
+    //token过期
+    Integer TOKEN_EXPIRED = 211;
 
 
 }

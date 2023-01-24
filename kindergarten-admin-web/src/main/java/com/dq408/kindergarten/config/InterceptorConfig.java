@@ -22,6 +22,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
         //上一步拦截所有然后得到的也是一个InterceptorRegistration，调用excludePathPatterns方法指定可以放行的路径
         register.excludePathPatterns("/admin/auth/login");
+        register.excludePathPatterns("/admin/auth/verifyCode");
+        register.excludePathPatterns("/admin/home/getAvatar");
     }
     
     @Bean//AuthenticationInterceptor自定义的认证拦截器，自动配置并注入spring管理

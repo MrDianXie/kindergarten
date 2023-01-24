@@ -6,6 +6,7 @@ import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.RoleService;
 import com.dq408.kindergarten.service.UserService;
 import com.dq408.kindergarten.utils.AjaxResult;
+import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class TeacherController {
      * 获取所有老师的信息
      * @return Map<String, Object>
      */
+    @UserLoginToken
     @GetMapping("/teacherList")
     public Map<String, Object> getTeacherList(){
         //查询教师列表
@@ -53,6 +55,7 @@ public class TeacherController {
      * @param selectKey
      * @return Map<String, Object>
      */
+    @UserLoginToken
     @PostMapping("/selectTeacher")
     public Map<String, Object> selectByName(String selectKey){
 

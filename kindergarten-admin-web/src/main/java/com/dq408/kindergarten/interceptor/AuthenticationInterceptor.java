@@ -1,4 +1,5 @@
 package com.dq408.kindergarten.interceptor;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -7,17 +8,18 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.UserService;
-import com.dq408.kindergarten.utils.StateCode;
+import com.dq408.kindergarten.utils.exception.tokenexption.TokenIsNull;
+import com.dq408.kindergarten.utils.exception.tokenexption.TokenPassFail;
+import com.dq408.kindergarten.utils.exception.tokenexption.TokenUserIsAbsent;
 import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.utils.jwt.anntation.PassToken;
 import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 /**
@@ -35,7 +37,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         //从http请求头中取出token
         String token = request.getHeader("X-Admin-Token");
-        System.out.println("token:"+token);
+        System.out.println("token=>:"+token);
         //如果不是映射到方法直接通过(不是映射方法指的是没有说明请求路径的方法，如controller中的普通方法)
         if (!(handler instanceof HandlerMethod)) {
             return true;
@@ -58,7 +60,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if (userLoginToken.required()) {
                 //执行认证
                 if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
+                    throw new TokenIsNull("无token，请重新登录");
                 }
 
                 //获取token中的userCode
@@ -67,19 +69,19 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     userId = JwtUtil.passToken(token);
                 } catch (JWTDecodeException e) {
-                    throw new RuntimeException("token验证失败");
+                    throw new TokenPassFail("token验证失败");
                 }
 
                 User user = userService.getOne(new QueryWrapper<User>().eq("uid",userId));
                 if(user == null){
-                    throw new RuntimeException("用户不存在，请重新登录!");
+                    throw new TokenUserIsAbsent("用户不存在，请重新登录!");
                 }
                 //验证token    verifier:校验机    Algorithm：算法
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
-                    throw new RuntimeException("token验证失败");
+                    throw new TokenPassFail("token验证失败");
                 }
                 return true;
             }

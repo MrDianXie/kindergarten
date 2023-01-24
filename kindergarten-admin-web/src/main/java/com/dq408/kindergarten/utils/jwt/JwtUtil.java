@@ -30,7 +30,7 @@ public class JwtUtil {
             Map<String, Object> map = new HashMap<String, Object>();
             Date nowDate = new Date();
             // 过期时间：2小时
-            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,0);
+            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,10);
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()
@@ -70,10 +70,9 @@ public class JwtUtil {
             Claim claim = claims.get("userId");
             return claim.asLong();
         } catch (JWTVerificationException exception){
-//            System.out.println("JWT异常");
-			exception.printStackTrace();
+            System.out.println("JWT异常");
+            throw exception;
         }
-        return 0L;
     }
 
     public static Date getAfterDate(Date date, int year, int month, int day, int hour, int minute, int second){

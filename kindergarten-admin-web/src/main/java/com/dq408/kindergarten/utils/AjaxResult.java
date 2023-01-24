@@ -34,5 +34,13 @@ public class AjaxResult {
         return result;
     }
 
+    public static Map<String,Object> fail(int errno, String errmsg,Object data){
+        Map<String,Object> result = new HashMap<>();
+        result.put("errno",errno);
+        result.put("errmsg",errmsg);
+        result.put("data",data);
+        return result;
+    }
+
 
 }

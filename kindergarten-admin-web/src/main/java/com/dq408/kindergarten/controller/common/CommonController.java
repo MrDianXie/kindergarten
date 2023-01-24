@@ -1,6 +1,7 @@
 package com.dq408.kindergarten.controller.common;
 
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.UserService;
@@ -8,7 +9,6 @@ import com.dq408.kindergarten.utils.AjaxResult;
 import com.dq408.kindergarten.utils.StateCode;
 import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.utils.jwt.anntation.PassToken;
-import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -54,35 +54,37 @@ public class CommonController {
      * @param token
      * @return Map
      */
-    @UserLoginToken
+    @PassToken
     @PostMapping("/whoAmI")
     public Map<String,Object> whoAmI(@RequestHeader("X-Admin-Token") String token){
 
-        return null;
+        try {
+            //解析token
+            Long userId = JwtUtil.passToken(token);
+            //判断token是否有效
+            if (userId == 0) {//无效
+                return AjaxResult.fail(StateCode.TOKEN_OVERDUE, "token无效");
+            } else {//有效
+                User user = userService.getOne(new QueryWrapper<User>()
+                        .eq("uid", userId)
+                );
 
-//            //解析token
-//            Long userId = JwtUtil.passToken(token);
-//            //判断token是否有效
-//            if (userId == 0) {//无效
-//                return AjaxResult.fail(StateCode.TOKEN_OVERDUE, "token无效");
-//            } else {//有效
-//                User user = userService.getOne(new QueryWrapper<User>()
-//                        .eq("uid", userId)
-//                );
-//
-//                //通过用户id查询该用户
-//                if (user != null) {//用户存在
-//                    //构造用户信息返回
-//                    Map<String, Object> userInfo = new HashMap<>();
-//
-//                    userInfo.put("username", user.getUsername());
-//                    userInfo.put("avatar", user.getAvatar());
-//
-//                    return AjaxResult.success(userInfo);
-//                } else {
-//                    return AjaxResult.fail();
-//                }
-//            }
+                //通过用户id查询该用户
+                if (user != null) {//用户存在
+                    //构造用户信息返回
+                    Map<String, Object> userInfo = new HashMap<>();
+
+                    userInfo.put("username", user.getUsername());
+                    userInfo.put("avatar", user.getAvatar());
+
+                    return AjaxResult.success(userInfo);
+                } else {
+                    return AjaxResult.fail();
+                }
+            }
+        } catch (JWTVerificationException e){
+            return AjaxResult.fail(StateCode.TOKEN_EXPIRED,"操作失败");
+        }
 
     }
 

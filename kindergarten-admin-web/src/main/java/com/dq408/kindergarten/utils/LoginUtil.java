@@ -22,7 +22,7 @@ public class LoginUtil {
 
         /** 账号验证 */
         if ( user == null ){
-            return AjaxResult.fail(StateCode.ACCOUNT_ERR,"用户信息错误");
+            return AjaxResult.fail(StateCode.ACCOUNT_ERR,"用户信息错误",null);
         } else {
 
             /** 密码验证 */
