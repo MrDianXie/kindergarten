@@ -55,8 +55,8 @@ public class CommonController {
      * @return Map
      */
     @PassToken
-    @PostMapping("/whoAmI")
-    public Map<String,Object> whoAmI(@RequestHeader("X-Admin-Token") String token){
+    @GetMapping("/whoAmI")
+    public Map<String,Object> whoAmI(@RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token){
 
         try {
             //解析token

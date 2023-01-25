@@ -18,7 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         //注册拦截规则     addInterceptor():需要传入一个拦截器，可以是自定义拦截规则
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(authenticationInterceptor());
         //addPathPatterns("/**")所有的请求都拦截
-        InterceptorRegistration register = interceptorRegistration.addPathPatterns("/**");
+        InterceptorRegistration register = interceptorRegistration.addPathPatterns("/admin/**");
 
         //上一步拦截所有然后得到的也是一个InterceptorRegistration，调用excludePathPatterns方法指定可以放行的路径
         register.excludePathPatterns("/admin/auth/login");

@@ -1,6 +1,6 @@
 package com.dq408.kindergarten.controller.error;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.dq408.kindergarten.utils.AjaxResult;
 import com.dq408.kindergarten.utils.StateCode;
 import com.dq408.kindergarten.utils.exception.tokenexption.TokenIsNull;
@@ -15,9 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
+/**
+ * 统一处理Token抛出的异常
+ * @author XIE_HRZGZ
+ */
 @ControllerAdvice
 @RestController
 public class ExceptionController {
+    int i= 1;
 
 
     @ExceptionHandler(TokenPassFail.class)
@@ -41,9 +46,10 @@ public class ExceptionController {
         return modelAndView;
     }
 
-    @ExceptionHandler(TokenExpiredException.class)
+    @ExceptionHandler(JWTVerificationException.class)
     public ModelAndView tokenExpired(){
-        System.out.println("捕获到了");
+
+        System.out.println("捕获到了"+i++);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/tokenExpired");
         return modelAndView;

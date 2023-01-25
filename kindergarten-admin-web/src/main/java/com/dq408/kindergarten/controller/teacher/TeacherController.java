@@ -6,10 +6,12 @@ import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.RoleService;
 import com.dq408.kindergarten.service.UserService;
 import com.dq408.kindergarten.utils.AjaxResult;
+import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,20 +36,27 @@ public class TeacherController {
     private RoleService roleService;
 
 
-
     /**
-     * 获取所有老师的信息
-     * @return Map<String, Object>
+     * 获取教师列表
+     * @return
      */
     @UserLoginToken
     @GetMapping("/teacherList")
-    public Map<String, Object> getTeacherList(){
+    public Map<String, Object> getTeacherList(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token){
+
+        String newToken = JwtUtil.renewalToken(token);
+
         //查询教师列表
         List<User> list = userService.list(new QueryWrapper<User>()
             .eq("roleid",getRoleId())
         );
 
-        return AjaxResult.success(list);
+        HashMap<String,Object> data = new HashMap<>();
+        data.put("list",list);
+        data.put("token",newToken);
+
+        return AjaxResult.success(data);
     }
 
     /**
@@ -56,11 +65,12 @@ public class TeacherController {
      * @return Map<String, Object>
      */
     @UserLoginToken
-    @PostMapping("/selectTeacher")
-    public Map<String, Object> selectByName(String selectKey){
+    @GetMapping("/selectTeacher")
+    public Map<String, Object> selectByName(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token
+            ,String selectKey){
 
-        System.out.println(getRoleId());
-        System.out.println(selectKey);
+        String newToken = JwtUtil.renewalToken(token);
 
         List<User> list = userService.list(new QueryWrapper<User>()
             .and(i -> i.like("username", selectKey == null ? "" : selectKey)
@@ -71,9 +81,26 @@ public class TeacherController {
             ).eq("roleid", getRoleId())
 
         );
-            return AjaxResult.success(list);
 
+
+        HashMap<String,Object> data = new HashMap<>();
+        data.put("list",list);
+        data.put("token",token);
+        return AjaxResult.success(data);
     }
+
+
+    @UserLoginToken
+    @PostMapping("/insert")
+    public Map<String,Object> insert(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            @RequestBody User user
+    ){
+
+        System.out.println(user);
+        return null;
+    }
+
 
     private Long getRoleId(){
         return roleService.getOne(new QueryWrapper<Role>().eq("rname", "老师")).getRid();

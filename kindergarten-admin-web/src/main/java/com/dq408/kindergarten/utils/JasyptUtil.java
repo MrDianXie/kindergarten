@@ -2,6 +2,8 @@ package com.dq408.kindergarten.utils;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
+import java.util.Locale;
+
 public class JasyptUtil {
     public static void main(String[] args) {
         //创建加密对象
@@ -15,8 +17,6 @@ public class JasyptUtil {
 
         System.out.println(user);
         System.out.println(pass);
-
-
 
 
 

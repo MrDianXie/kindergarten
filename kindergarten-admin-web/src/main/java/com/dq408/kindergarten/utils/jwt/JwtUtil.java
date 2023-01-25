@@ -1,15 +1,21 @@
 package com.dq408.kindergarten.utils.jwt;
 
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.*;
 
+
 public class JwtUtil {
+
+
+    public static final String HEADER_TOKEN_NAME = "X-Admin-Token";
     // 秘钥
     static final String SECRET = "Kinder-Token";
     // 签名是有谁生成
@@ -19,18 +25,20 @@ public class JwtUtil {
     // 签名的观众
     static final String AUDIENCE = "ADMINWEBAPP";
 
+    static final List<String> badTokenList = new ArrayList<>();
+
+
     /**
      * 生成token
      * @param userId 用户ID
      * @return String
      */
-    public static String getToken(Long userId){
+    public static String getToken(Long userId,Date nowDate){
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             Map<String, Object> map = new HashMap<String, Object>();
-            Date nowDate = new Date();
-            // 过期时间：2小时
-            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,10);
+            // 过期时间：1小时
+            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,0);
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()
@@ -61,16 +69,13 @@ public class JwtUtil {
      */
     public static Long passToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(ISSUSER)
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
+            DecodedJWT jwt = verifyToken(token);
             Map<String, Claim> claims = jwt.getClaims();
             Claim claim = claims.get("userId");
             return claim.asLong();
         } catch (JWTVerificationException exception){
             System.out.println("JWT异常");
+//            return 0L;
             throw exception;
         }
     }
@@ -102,6 +107,70 @@ public class JwtUtil {
             cal.add(Calendar.SECOND, second);
         }
         return cal.getTime();
+    }
+
+
+    /**
+     * 当有效时间小于等于10分钟自动续签
+     * @param oldToken
+     * @return Token
+     */
+    public static String renewalToken (String oldToken){
+        //获取当前token的过期时间
+        long expiresTime = getExpiresAt(oldToken).getTime();
+        //获取当前的系统时间
+        long nowTime = System.currentTimeMillis();
+        //将毫秒值化为秒
+        long residualTime = (expiresTime - nowTime)/1000;
+
+        System.out.println("当前token剩余："+residualTime+"秒钟过期");
+        if (residualTime <= 600 && residualTime > 0){//token在十分钟内会过期
+            //解析当前token中的userid
+            Long userid = passToken(oldToken);
+            badTokenList.add(oldToken);
+            //创建新的token
+            System.out.println("token刷新了");
+            System.out.println(badTokenList);
+            return getToken(userid, new Date());
+
+        }
+
+        //大于10分钟 返回原来的token
+        return oldToken;
+    }
+
+
+    /**
+     * 获取token过期时间
+     * @param oldToken 客户端传入的token
+     * @return Data
+     */
+    private static Date getExpiresAt(String oldToken){
+        DecodedJWT jwt = verifyToken(oldToken);
+        return jwt.getExpiresAt();
+
+    }
+
+
+    /**
+     * 验证token是否过期
+     * @param token
+     * @return
+     */
+    public static DecodedJWT verifyToken(String token){
+        DecodedJWT jwt;
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(ISSUSER)
+                    .build();
+            jwt = verifier.verify(token);
+        } catch (TokenExpiredException e){
+            throw e;
+        }
+
+        return jwt;
+
     }
 
 

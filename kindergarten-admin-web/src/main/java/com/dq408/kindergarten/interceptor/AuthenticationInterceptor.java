@@ -1,10 +1,6 @@
 package com.dq408.kindergarten.interceptor;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.dq408.kindergarten.domain.User;
 import com.dq408.kindergarten.service.UserService;
@@ -36,8 +32,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 
         //从http请求头中取出token
-        String token = request.getHeader("X-Admin-Token");
+        String token = request.getHeader(JwtUtil.HEADER_TOKEN_NAME);
         System.out.println("token=>:"+token);
+        JwtUtil.renewalToken(token);
         //如果不是映射到方法直接通过(不是映射方法指的是没有说明请求路径的方法，如controller中的普通方法)
         if (!(handler instanceof HandlerMethod)) {
             return true;
@@ -69,19 +66,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     userId = JwtUtil.passToken(token);
                 } catch (JWTDecodeException e) {
-                    throw new TokenPassFail("token验证失败");
+                    System.out.println("pass:token验证失败");
+                    throw new TokenPassFail("pass:token验证失败");
                 }
 
                 User user = userService.getOne(new QueryWrapper<User>().eq("uid",userId));
                 if(user == null){
                     throw new TokenUserIsAbsent("用户不存在，请重新登录!");
-                }
-                //验证token    verifier:校验机    Algorithm：算法
-                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
-                try {
-                    jwtVerifier.verify(token);
-                } catch (JWTVerificationException e) {
-                    throw new TokenPassFail("token验证失败");
                 }
                 return true;
             }

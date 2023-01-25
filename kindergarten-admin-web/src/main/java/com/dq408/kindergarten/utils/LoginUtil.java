@@ -5,6 +5,7 @@ import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.vo.LoginInfoVo;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class LoginUtil {
@@ -31,7 +32,9 @@ public class LoginUtil {
             }
 
             /** 验证码验证 */
-            if (!code.equals(loginInfoVo.getCode())){
+            System.out.println("code:"+code);
+            System.out.println(loginInfoVo.getCode());
+            if (!code.equals(loginInfoVo.getCode()) && !code.toUpperCase(Locale.ROOT).equals(loginInfoVo.getCode())){
                 return AjaxResult.fail(StateCode.CAPTCHA_ERR,"验证码错误");
             }
 
@@ -46,7 +49,7 @@ public class LoginUtil {
             userInfo.put("avatar",user.getAvatar());
             userInfo.put("username", user.getUsername());
             System.out.println(user.getUid().longValue());
-            data.put("token", JwtUtil.getToken(user.getUid()));
+            data.put("token", JwtUtil.getToken(user.getUid(),null));
             data.put("userInfo",userInfo);
             return AjaxResult.success(data);
         }
