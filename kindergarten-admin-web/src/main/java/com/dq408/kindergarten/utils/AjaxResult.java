@@ -27,6 +27,14 @@ public class AjaxResult {
         result.put("errmsg","失败");
         return result;
     }
+
+    public static Map<String,Object> fail(Object data){
+        Map<String,Object> result = new HashMap<>();
+        result.put("errno",StateCode.FAIL);
+        result.put("errmsg","失败");
+        result.put("token",data);
+        return result;
+    }
     public static Map<String,Object> fail(int errno, String errmsg){
         Map<String,Object> result = new HashMap<>();
         result.put("errno",errno);

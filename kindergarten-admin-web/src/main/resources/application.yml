@@ -1,3 +1,5 @@
+
+#配置端口
 server:
   port: 8090
 
@@ -17,3 +19,18 @@ jasypt:
  encryptor:
   password: "xjhsdaw123@#$"
 
+
+#mybatis-plus
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+#logging:
+#  level:
+#    root: warn
+#    com.dq408.kindergarten.dao: trace
+#  pattern:
+#    console: '%p%m%n'

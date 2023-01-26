@@ -21,7 +21,7 @@ public class User implements Serializable {
     /**
      * 用户id
      */
-    @TableId(value = "uid", type = IdType.ASSIGN_ID)
+    @TableId(value = "uid", type = IdType.AUTO)
     private Long uid;
 
     /**
@@ -62,7 +62,7 @@ public class User implements Serializable {
     /**
      * 用户角色
      */
-    private Integer roleid;
+    private Long roleid;
 
     /**
      * 创建时间
@@ -159,11 +159,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Integer getRoleid() {
+    public Long getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(Integer roleid) {
+    public void setRoleid(Long roleid) {
         this.roleid = roleid;
     }
 
@@ -227,7 +227,7 @@ public class User implements Serializable {
         ", phone=" + phone +
         ", email=" + email +
         ", roleid=" + roleid +
-        ", updateTime=" + updateTime +
+        ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         ", yl1=" + yl1 +
         ", yl2=" + yl2 +

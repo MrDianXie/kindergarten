@@ -8,4 +8,5 @@ import com.dq408.kindergarten.domain.User;
  * @author XIE_HRZGZ
  */
 public interface UserDao extends BaseMapper<User> {
+
 }

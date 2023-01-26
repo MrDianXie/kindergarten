@@ -11,7 +11,7 @@ import java.util.Map;
 public class LoginUtil {
 
     /** admin角色id */
-    private static final Integer ROLE_ID = 2;
+    private static final Long ROLE_ID = 2L;
 
 
     /**
