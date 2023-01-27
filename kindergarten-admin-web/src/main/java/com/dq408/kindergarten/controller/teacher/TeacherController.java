@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +39,29 @@ public class TeacherController {
     private RoleService roleService;
 
 
+
+
+
+    @UserLoginToken
+    @DeleteMapping("/delete")
+    public Map<String,Object> delete(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            Long uid
+    ){
+        //续签token
+        String newToken = JwtUtil.renewalToken(token);
+        System.out.println("删除成功："+uid);
+        boolean result = userService.removeById(uid);
+        if (result){
+            return AjaxResult.success(newToken);
+        } else {
+            return AjaxResult.fail(newToken);
+        }
+    }
+
+
+
+
     /**
      * 翻页查询教师列表
      * @param token token
@@ -50,8 +72,7 @@ public class TeacherController {
     public Map<String, Object> getTeacherList(
             @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
             Page<User> pages
-    )
-    {
+    ){
 
 
 
@@ -72,29 +93,32 @@ public class TeacherController {
 
     /**
      * 通过用户名查询教师
-     * @param selectKey 查询条件
+     * @param
      * @return Map<String, Object>
      */
     @UserLoginToken
     @GetMapping("/selectTeacher")
     public Map<String, Object> selectByName(
-            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token
-            ,String selectKey){
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            String selectKey,
+            Integer page,
+            Integer pageSize
+            ){
 
-        String newToken = JwtUtil.renewalToken(token);
         System.out.println(selectKey);
 
-        List<User> list = userService.list(new QueryWrapper<User>()
-            .and(i -> i.like("username", selectKey == null ? "" : selectKey)
-                    .or()
-                    .like("mnemonic_code", selectKey == null ? "" : selectKey)
-                    .or()
-                    .like("phone", selectKey == null ? "" : selectKey)
-            ).eq("roleid", getRoleId())
-
+        String newToken = JwtUtil.renewalToken(token);
+        //创建构造器查询
+        Page<User> list = userService.getBaseMapper().selectPage(new Page<User>(page, pageSize),
+                new QueryWrapper<User>()
+                        .and(i -> i.like("username", selectKey == null ? "" : selectKey)
+                                .or()
+                                .like("mnemonic_code", selectKey == null ? "" : selectKey)
+                                .or()
+                                .like("phone", selectKey == null ? "" : selectKey)
+                        ).eq("roleid", getRoleId()
+                )
         );
-
-
         HashMap<String,Object> data = new HashMap<>();
         data.put("list",list);
         data.put("token",newToken);

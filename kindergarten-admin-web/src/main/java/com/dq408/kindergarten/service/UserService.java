@@ -6,4 +6,5 @@ import com.dq408.kindergarten.domain.User;
 
 public interface UserService extends IService<User> {
 
+
 }
