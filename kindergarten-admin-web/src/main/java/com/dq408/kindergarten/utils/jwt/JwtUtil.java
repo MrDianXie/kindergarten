@@ -112,7 +112,7 @@ public class JwtUtil {
 
     /**
      * 当有效时间小于等于10分钟自动续签
-     * @param oldToken
+     * @param oldToken 旧token
      * @return Token
      */
     public static String renewalToken (String oldToken){
@@ -129,7 +129,7 @@ public class JwtUtil {
             Long userid = passToken(oldToken);
             badTokenList.add(oldToken);
             //创建新的token
-            System.out.println("token刷新了");
+//            System.out.println("token刷新了");
             System.out.println(badTokenList);
             return getToken(userid, new Date());
 

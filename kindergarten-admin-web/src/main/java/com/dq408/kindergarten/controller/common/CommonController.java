@@ -35,9 +35,9 @@ public class CommonController {
 
     /**
      * 获取头像
-     * @param response
-     * @param username
-     * @throws IOException
+     * @param response 用于响应图片
+     * @param username 用户名
+     * @throws IOException io异常
      */
     @PassToken
     @GetMapping("/getAvatar")
@@ -50,8 +50,8 @@ public class CommonController {
 
 
     /**
-     *
-     * @param token
+     * 验证用户信息
+     * @param token 验证令牌
      * @return Map
      */
     @PassToken

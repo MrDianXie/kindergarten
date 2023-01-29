@@ -53,8 +53,8 @@ public class LoginController {
 
     /**
      * 验证登录
-     * @param loginInfoVo
-     * @return
+     * @param loginInfoVo 用户信息
+     * @return map
      */
     @PassToken
     @PostMapping("/login")

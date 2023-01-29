@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,23 +40,109 @@ public class TeacherController {
     private RoleService roleService;
 
 
+    /**
+     * 通过id修改教师信息
+     * @param token token令牌
+     * @param user teacher信息
+     * @return map
+     */
+    @UserLoginToken
+    @PutMapping("/update")
+    public Map<String,Object> update(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            @RequestBody User user
+    ){
+        HashMap<String,Object> data = new HashMap<>();
+        //更新token
+        String newToken = JwtUtil.renewalToken(token);
+        data.put("token",newToken);
+        //设置更改时间
+        user.setUpdateTime(LocalDateTime.now());
+        System.out.println(user);
 
+        boolean result = userService.updateById(user);
+        if (result){
+            return AjaxResult.success(data);
+        } else {
+            return AjaxResult.fail(data);
+        }
+    }
 
+    /**
+     * 批量删除
+     * @param token 验证令牌
+     * @param uids 批量删除教师的id
+     * @return map
+     */
+    @UserLoginToken
+    @DeleteMapping("/deleteAll")
+    public Map<String,Object> deleteAll(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            String uids
+    ){
 
+        //续签token
+        String newToken = JwtUtil.renewalToken(token);
+        HashMap<String,Object> data = new HashMap<>();
+        data.put("token",newToken);
+        //将教师id解析出来
+        String[] ids = uids.split("-");
+        ArrayList<Long> id = new ArrayList<>();
+        //遍历ids
+        for (String uid: ids){
+            //将uid转换成Long类型
+            id.add(Long.parseLong(uid));
+        }
+        //批量删除
+        boolean result = userService.removeByIds(id);
+        //判断是否删除成功
+        if (result){//成功
+            return AjaxResult.success(data);
+        }
+        return AjaxResult.fail(data);
+    }
+
+    /**
+     * 删除单条教师信息
+     * @param token 验证令牌
+     * @param uid 教师id
+     * @return map
+     */
     @UserLoginToken
     @DeleteMapping("/delete")
     public Map<String,Object> delete(
             @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
             Long uid
     ){
+        HashMap<String,Object> data = new HashMap<>();
         //续签token
         String newToken = JwtUtil.renewalToken(token);
         System.out.println("删除成功："+uid);
+        data.put("token",newToken);
         boolean result = userService.removeById(uid);
         if (result){
-            return AjaxResult.success(newToken);
+            return AjaxResult.success(data);
         } else {
-            return AjaxResult.fail(newToken);
+            return AjaxResult.fail(data);
+        }
+    }
+
+    @UserLoginToken
+    @GetMapping("/selectById")
+    public Map<String,Object> selectById(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            Long uid
+    ){
+        System.out.println(uid);
+        HashMap<String,Object> data = new HashMap<>();
+        String newToken = JwtUtil.renewalToken(token);
+        data.put("token",token);
+        User teacher = userService.getOne(new QueryWrapper<User>().eq("uid", uid));
+        if (teacher != null){
+            data.put("teacher",teacher);
+            return AjaxResult.success(data);
+        } else {
+            return AjaxResult.fail(data);
         }
     }
 
@@ -92,13 +179,16 @@ public class TeacherController {
     }
 
     /**
-     * 通过用户名查询教师
-     * @param
-     * @return Map<String, Object>
+     * 通过搜索条件查询教师
+     * @param token token令牌
+     * @param selectKey 查询条件
+     * @param page 当前页
+     * @param pageSize 每页信息条数
+     * @return map
      */
     @UserLoginToken
     @GetMapping("/selectTeacher")
-    public Map<String, Object> selectByName(
+    public Map<String, Object> selectByKey(
             @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
             String selectKey,
             Integer page,
@@ -110,14 +200,14 @@ public class TeacherController {
         String newToken = JwtUtil.renewalToken(token);
         //创建构造器查询
         Page<User> list = userService.getBaseMapper().selectPage(new Page<User>(page, pageSize),
-                new QueryWrapper<User>()
-                        .and(i -> i.like("username", selectKey == null ? "" : selectKey)
-                                .or()
-                                .like("mnemonic_code", selectKey == null ? "" : selectKey)
-                                .or()
-                                .like("phone", selectKey == null ? "" : selectKey)
-                        ).eq("roleid", getRoleId()
-                )
+            new QueryWrapper<User>()
+                .and(i -> i.like("username", selectKey == null ? "" : selectKey)
+                        .or()
+                        .like("mnemonic_code", selectKey == null ? "" : selectKey)
+                        .or()
+                        .like("phone", selectKey == null ? "" : selectKey)
+                ).eq("roleid", getRoleId()
+            )
         );
         HashMap<String,Object> data = new HashMap<>();
         data.put("list",list);
