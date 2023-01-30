@@ -72,12 +72,7 @@ public class CommonController {
                 //通过用户id查询该用户
                 if (user != null) {//用户存在
                     //构造用户信息返回
-                    Map<String, Object> userInfo = new HashMap<>();
-
-                    userInfo.put("username", user.getUsername());
-                    userInfo.put("avatar", user.getAvatar());
-
-                    return AjaxResult.success(userInfo);
+                    return AjaxResult.success(user);
                 } else {
                     return AjaxResult.fail();
                 }

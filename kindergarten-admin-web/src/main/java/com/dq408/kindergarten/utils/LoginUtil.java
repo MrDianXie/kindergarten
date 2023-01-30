@@ -48,6 +48,9 @@ public class LoginUtil {
             HashMap<String,Object> userInfo = new HashMap<>();
             userInfo.put("avatar",user.getAvatar());
             userInfo.put("username", user.getUsername());
+            userInfo.put("gander", user.getGander());
+            userInfo.put("phone", user.getPhone());
+            userInfo.put("email", user.getEmail());
             System.out.println(user.getUid().longValue());
             data.put("token", JwtUtil.getToken(user.getUid(),null));
             data.put("userInfo",userInfo);

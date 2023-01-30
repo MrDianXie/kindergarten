@@ -115,7 +115,8 @@ public class JwtUtil {
      * @param oldToken 旧token
      * @return Token
      */
-    public static String renewalToken (String oldToken){
+    public static Map<String,Object> renewalToken (String oldToken){
+        HashMap<String,Object> data = new HashMap<>();
         //获取当前token的过期时间
         long expiresTime = getExpiresAt(oldToken).getTime();
         //获取当前的系统时间
@@ -131,12 +132,15 @@ public class JwtUtil {
             //创建新的token
 //            System.out.println("token刷新了");
             System.out.println(badTokenList);
-            return getToken(userid, new Date());
+            String token = getToken(userid, new Date());
+            data.put("token",token);
+            return data;
 
         }
 
         //大于10分钟 返回原来的token
-        return oldToken;
+        data.put("token",oldToken);
+        return data;
     }
 
 
