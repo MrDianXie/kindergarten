@@ -66,7 +66,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 try {
                     userId = JwtUtil.passToken(token);
                 } catch (JWTDecodeException e) {
-                    System.out.println("pass:token验证失败");
                     throw new TokenPassFail("pass:token验证失败");
                 }
 

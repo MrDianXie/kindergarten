@@ -158,8 +158,8 @@ public class JwtUtil {
 
     /**
      * 验证token是否过期
-     * @param token
-     * @return
+     * @param token token
+     * @return DecodedJWT
      */
     public static DecodedJWT verifyToken(String token){
         DecodedJWT jwt;

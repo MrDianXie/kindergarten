@@ -1,8 +1,8 @@
 package com.dq408.kindergarten.utils;
 
+
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class AjaxResult {
 

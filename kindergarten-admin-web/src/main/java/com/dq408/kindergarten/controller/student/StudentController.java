@@ -15,11 +15,9 @@ import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
 import com.dq408.kindergarten.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,31 +66,6 @@ public class StudentController {
         return AjaxResult.fail(data);
     }
 
-
-    private void passPage(Page<Student> studentPage, List<StudentVo> list){
-        for (Student s: studentPage.getRecords()){
-            StudentVo studentVo = new StudentVo();
-            //查询该学生的班级
-            Classandgrade classAndGrade = classAndGradeService.getById(s.getCid());
-            //查询该学生的家长
-            User patriarch = userService.getById(s.getUid());
-            studentVo.setSid(s.getSid());
-            studentVo.setSname(s.getSname());
-            studentVo.setGander(s.getGander());
-            studentVo.setAge(s.getAge());
-            studentVo.setCreateTime(s.getCreateTime());
-            studentVo.setUpdateTime(s.getUpdateTime());
-            studentVo.setAddress(s.getAddress());
-            studentVo.setCid(s.getCid());
-            studentVo.setUid(s.getUid());
-            studentVo.setClassName(classAndGrade.getCname());
-            studentVo.setPatriarchName(patriarch.getUsername());
-
-            list.add(studentVo);
-        }
-    }
-
-
     /**
      *
      * @param token token令牌
@@ -130,5 +103,74 @@ public class StudentController {
         }
         return AjaxResult.fail(data);
 
+    }
+
+    /**
+     * 新增一条学生数据
+     * @param token token
+     * @param student 学生实体类
+     * @return map
+     */
+    @UserLoginToken
+    @PostMapping("/insert")
+    public Map<String,Object> insert(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            @RequestBody Student student
+    ){
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        student.setCreateTime(LocalDateTime.now());
+
+        boolean result = studentService.save(student);
+        if (result){
+            return AjaxResult.success(data);
+        }
+        return AjaxResult.success(data);
+    }
+
+
+    /**
+     * 删除一条学生数据
+     * @param token token
+     * @param sid 学生id
+     * @return map
+     */
+    @UserLoginToken
+    @DeleteMapping("/del")
+    public Map<String, Object> del(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            Long sid
+    ){
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        boolean result = studentService.removeById(sid);
+        if (result){
+            return AjaxResult.success(data);
+        }
+        return AjaxResult.fail(data);
+    }
+
+
+
+    private void passPage(Page<Student> studentPage, List<StudentVo> list){
+        for (Student s: studentPage.getRecords()){
+            StudentVo studentVo = new StudentVo();
+            //查询该学生的班级
+            Classandgrade classAndGrade = classAndGradeService.getById(s.getCid());
+            //查询该学生的家长
+            User patriarch = userService.getById(s.getUid());
+            studentVo.setSid(s.getSid());
+            studentVo.setSname(s.getSname());
+            studentVo.setGander(s.getGander());
+            studentVo.setAge(s.getAge());
+            studentVo.setCreateTime(s.getCreateTime());
+            studentVo.setUpdateTime(s.getUpdateTime());
+            studentVo.setAddress(s.getAddress());
+            studentVo.setCid(s.getCid());
+            studentVo.setUid(s.getUid());
+            studentVo.setClassName(classAndGrade.getCname());
+            if (patriarch != null){
+                studentVo.setPatriarchName(patriarch.getUsername());
+            }
+            list.add(studentVo);
+        }
     }
 }

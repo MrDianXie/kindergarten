@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,8 +23,6 @@ import java.util.Map;
 @ControllerAdvice
 @RestController
 public class ExceptionController {
-    int i= 1;
-
 
     @ExceptionHandler(TokenPassFail.class)
     public ModelAndView tokenPassFailHandler(){
@@ -48,8 +47,6 @@ public class ExceptionController {
 
     @ExceptionHandler(JWTVerificationException.class)
     public ModelAndView tokenExpired(){
-
-        System.out.println("捕获到了"+i++);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/tokenExpired");
         return modelAndView;
