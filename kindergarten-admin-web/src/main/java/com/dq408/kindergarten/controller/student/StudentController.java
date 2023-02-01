@@ -106,6 +106,30 @@ public class StudentController {
     }
 
     /**
+     * 通过id查询学生
+     * @param token token
+     * @param sid 学生id
+     * @return map
+     */
+    @UserLoginToken
+    @GetMapping("/selectById")
+    public Map<String,Object> selectById(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            Long sid
+    ){
+        System.out.println(sid);
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        Student student = studentService.getOne(new QueryWrapper<Student>().eq("sid", sid));
+        if (student != null){
+            data.put("student",student);
+            return AjaxResult.success(data);
+        } else {
+            return AjaxResult.fail();
+        }
+    }
+
+
+    /**
      * 新增一条学生数据
      * @param token token
      * @param student 学生实体类
@@ -146,6 +170,65 @@ public class StudentController {
             return AjaxResult.success(data);
         }
         return AjaxResult.fail(data);
+    }
+
+
+    /**
+     * 批量删除
+     * @param token 验证令牌
+     * @param sids 批量删除教师的id
+     * @return map
+     */
+    @UserLoginToken
+    @DeleteMapping("/delAll")
+    public Map<String,Object> deleteAll(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            String sids
+    ){
+        //续签token
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        //将教师id解析出来
+        String[] ids = sids.split("-");
+        ArrayList<Long> id = new ArrayList<>();
+        //遍历ids
+        for (String sid: ids){
+            //将uid转换成Long类型
+            id.add(Long.parseLong(sid));
+        }
+        //批量删除
+        boolean result = studentService.removeByIds(id);
+        //判断是否删除成功
+        if (result){//成功
+            return AjaxResult.success(data);
+        }
+        return AjaxResult.fail(data);
+    }
+
+
+    /**
+     * 通过id修改学生信息
+     * @param token token令牌
+     * @param student 学生信息
+     * @return map
+     */
+    @UserLoginToken
+    @PutMapping("/update")
+    public Map<String,Object> update(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
+            @RequestBody Student student
+    ){
+        //更新token
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        //设置更改时间
+        student.setUpdateTime(LocalDateTime.now());
+        System.out.println("修改"+student);
+
+        boolean result = studentService.updateById(student);
+        if (result){
+            return AjaxResult.success(data);
+        } else {
+            return AjaxResult.fail();
+        }
     }
 
 

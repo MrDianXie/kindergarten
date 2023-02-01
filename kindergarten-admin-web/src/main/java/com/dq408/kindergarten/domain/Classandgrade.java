@@ -41,12 +41,12 @@ public class Classandgrade implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
     /**
      * 预留
@@ -101,20 +101,20 @@ public class Classandgrade implements Serializable {
         this.state = state;
     }
 
-    public LocalDateTime getCreate_time() {
-        return create_time;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(LocalDateTime create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdate_time() {
-        return update_time;
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdate_time(LocalDateTime update_time) {
-        this.update_time = update_time;
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getYl1() {
@@ -156,8 +156,8 @@ public class Classandgrade implements Serializable {
         ", cname=" + cname +
         ", uid=" + uid +
         ", state=" + state +
-        ", create_time=" + create_time +
-        ", update_time=" + update_time +
+        ", createTime=" + createTime +
+        ", updateTime=" + updateTime +
         ", yl1=" + yl1 +
         ", yl2=" + yl2 +
         ", yl3=" + yl3 +

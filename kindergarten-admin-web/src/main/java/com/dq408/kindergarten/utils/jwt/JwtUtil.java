@@ -38,7 +38,7 @@ public class JwtUtil {
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             Map<String, Object> map = new HashMap<String, Object>();
             // 过期时间：1小时
-            Date expireDate = getAfterDate(nowDate,0,0,0,1,0,0);
+            Date expireDate = getAfterDate(nowDate,0,0,0,50,0,0);
             map.put("alg", "HS256");
             map.put("typ", "JWT");
             String token = JWT.create()
@@ -64,7 +64,7 @@ public class JwtUtil {
 
     /**
      * 解析token
-     * @param token
+     * @param token token
      * @return Long
      */
     public static Long passToken(String token) {

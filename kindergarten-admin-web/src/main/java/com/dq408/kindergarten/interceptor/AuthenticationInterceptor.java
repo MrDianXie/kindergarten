@@ -29,8 +29,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-
-
         //从http请求头中取出token
         String token = request.getHeader(JwtUtil.HEADER_TOKEN_NAME);
         System.out.println("token=>:"+token);
