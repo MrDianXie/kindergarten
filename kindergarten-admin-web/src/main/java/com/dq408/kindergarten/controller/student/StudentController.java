@@ -148,7 +148,7 @@ public class StudentController {
         if (result){
             return AjaxResult.success(data);
         }
-        return AjaxResult.success(data);
+        return AjaxResult.fail();
     }
 
 
@@ -176,7 +176,7 @@ public class StudentController {
     /**
      * 批量删除
      * @param token 验证令牌
-     * @param sids 批量删除教师的id
+     * @param sids 批量删除学生的id
      * @return map
      */
     @UserLoginToken
@@ -186,10 +186,10 @@ public class StudentController {
             String sids
     ){
         //续签token
-        Map<String, Object> data = JwtUtil.renewalToken(token);
-        //将教师id解析出来
-        String[] ids = sids.split("-");
+        //将学生id解析出来
         ArrayList<Long> id = new ArrayList<>();
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        String[] ids = sids.split("-");
         //遍历ids
         for (String sid: ids){
             //将uid转换成Long类型
@@ -198,7 +198,8 @@ public class StudentController {
         //批量删除
         boolean result = studentService.removeByIds(id);
         //判断是否删除成功
-        if (result){//成功
+        if (result){
+            //成功
             return AjaxResult.success(data);
         }
         return AjaxResult.fail(data);
@@ -249,7 +250,9 @@ public class StudentController {
             studentVo.setAddress(s.getAddress());
             studentVo.setCid(s.getCid());
             studentVo.setUid(s.getUid());
-            studentVo.setClassName(classAndGrade.getCname());
+            if (classAndGrade != null){
+                studentVo.setClassName(classAndGrade.getCname());
+            }
             if (patriarch != null){
                 studentVo.setPatriarchName(patriarch.getUsername());
             }

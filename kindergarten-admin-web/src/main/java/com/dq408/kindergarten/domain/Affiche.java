@@ -6,10 +6,6 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author XieJinHong
  * @since 2023-01-14
  */
@@ -36,7 +32,7 @@ public class Affiche implements Serializable {
     /**
      * 公告内容
      */
-    private String abody;
+    private String body;
 
     /**
      * 公告状态
@@ -46,12 +42,12 @@ public class Affiche implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     /**
      * 修改时间
      */
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
     /**
      * 预留
@@ -98,13 +94,6 @@ public class Affiche implements Serializable {
         this.title = title;
     }
 
-    public String getAbody() {
-        return abody;
-    }
-
-    public void setAbody(String abody) {
-        this.abody = abody;
-    }
 
     public Integer getState() {
         return state;
@@ -114,20 +103,28 @@ public class Affiche implements Serializable {
         this.state = state;
     }
 
-    public LocalDateTime getCreate_time() {
-        return create_time;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(LocalDateTime create_time) {
-        this.create_time = create_time;
+    public String getBody() {
+        return body;
     }
 
-    public LocalDateTime getUpdate_time() {
-        return update_time;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public void setUpdate_time(LocalDateTime update_time) {
-        this.update_time = update_time;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getYl1() {
@@ -165,17 +162,17 @@ public class Affiche implements Serializable {
     @Override
     public String toString() {
         return "Affiche{" +
-        "aid=" + aid +
-        ", uid=" + uid +
-        ", title=" + title +
-        ", abody=" + abody +
-        ", state=" + state +
-        ", create_time=" + create_time +
-        ", update_time=" + update_time +
-        ", yl1=" + yl1 +
-        ", yl2=" + yl2 +
-        ", yl3=" + yl3 +
-        ", yl4=" + yl4 +
-        "}";
+                "aid=" + aid +
+                ", uid=" + uid +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", state=" + state +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", yl1='" + yl1 + '\'' +
+                ", yl2='" + yl2 + '\'' +
+                ", yl3='" + yl3 + '\'' +
+                ", yl4='" + yl4 + '\'' +
+                '}';
     }
 }

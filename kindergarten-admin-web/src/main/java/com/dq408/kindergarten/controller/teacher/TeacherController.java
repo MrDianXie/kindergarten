@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,16 +29,42 @@ import java.util.Map;
 public class TeacherController {
 
 
-
-
-    //自动注入教师service
+    /**
+     * 自动注入教师service
+     */
     @Autowired
     private UserService userService;
 
-    //自动注入角色Service
+    /**
+     *  自动注入角色Service
+     */
     @Autowired
     private RoleService roleService;
 
+
+
+    /**
+     * 获取教师列表
+     * @param token token
+     * @return map
+     */
+    @UserLoginToken
+    @GetMapping("/list")
+    public Map<String,Object> getList(
+            @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token
+    ){
+        Map<String, Object> data = JwtUtil.renewalToken(token);
+        List<User> list = userService.list(
+                new QueryWrapper<User>()
+                        .eq("roleid", getRoleId())
+        );
+        if (list != null){
+            data.put("list",list);
+            return AjaxResult.success(data);
+        } else {
+            return AjaxResult.fail();
+        }
+    }
 
     /**
      * 通过id修改教师信息
@@ -61,7 +88,7 @@ public class TeacherController {
         if (result){
             return AjaxResult.success(data);
         } else {
-            return AjaxResult.fail(data);
+            return AjaxResult.fail();
         }
     }
 
@@ -91,10 +118,11 @@ public class TeacherController {
         //批量删除
         boolean result = userService.removeByIds(id);
         //判断是否删除成功
-        if (result){//成功
+        if (result){
+            //成功
             return AjaxResult.success(data);
         }
-        return AjaxResult.fail(data);
+        return AjaxResult.fail();
     }
 
     /**
@@ -117,7 +145,7 @@ public class TeacherController {
         if (result){
             return AjaxResult.success(data);
         } else {
-            return AjaxResult.fail(data);
+            return AjaxResult.fail();
         }
     }
 
@@ -140,7 +168,7 @@ public class TeacherController {
             data.put("teacher",teacher);
             return AjaxResult.success(data);
         } else {
-            return AjaxResult.fail(data);
+            return AjaxResult.fail();
         }
     }
 
@@ -172,7 +200,7 @@ public class TeacherController {
             data.put("list",list);
             return AjaxResult.success(data);
         } else {
-            return AjaxResult.fail(data);
+            return AjaxResult.fail();
         }
 
 
@@ -217,7 +245,7 @@ public class TeacherController {
             return AjaxResult.success(data);
         }
 
-        return AjaxResult.fail(data);
+        return AjaxResult.fail();
 
     }
 
@@ -248,10 +276,11 @@ public class TeacherController {
         boolean saveResult = userService.save(user);
         //刷新token
         Map<String, Object> data = JwtUtil.renewalToken(token);
-        if (saveResult){//新增成功
+        if (saveResult){
+            //新增成功
             return AjaxResult.success(data);
         } else {//失败
-            return AjaxResult.fail(data);
+            return AjaxResult.fail();
         }
     }
 

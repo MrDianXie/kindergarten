@@ -11,21 +11,23 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.*;
 
-
+/**
+ * JWT工具类
+ * @author XIE_HRZGZ
+ */
 public class JwtUtil {
 
 
     public static final String HEADER_TOKEN_NAME = "X-Admin-Token";
-    // 秘钥
+    /* 秘钥*/
     static final String SECRET = "Kinder-Token";
-    // 签名是有谁生成
+    /* 签名是有谁生成*/
     static final String ISSUSER = "DQ-B-408";
     // 签名的主题
     static final String SUBJECT = "this is kinder token";
     // 签名的观众
     static final String AUDIENCE = "ADMINWEBAPP";
 
-    static final List<String> badTokenList = new ArrayList<>();
 
 
     /**
@@ -128,10 +130,7 @@ public class JwtUtil {
         if (residualTime <= 600 && residualTime > 0){//token在十分钟内会过期
             //解析当前token中的userid
             Long userid = passToken(oldToken);
-            badTokenList.add(oldToken);
             //创建新的token
-//            System.out.println("token刷新了");
-            System.out.println(badTokenList);
             String token = getToken(userid, new Date());
             data.put("token",token);
             return data;
