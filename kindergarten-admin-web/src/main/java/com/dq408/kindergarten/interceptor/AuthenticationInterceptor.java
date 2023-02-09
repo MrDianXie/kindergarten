@@ -10,6 +10,7 @@ import com.dq408.kindergarten.utils.exception.tokenexption.TokenUserIsAbsent;
 import com.dq408.kindergarten.utils.jwt.JwtUtil;
 import com.dq408.kindergarten.utils.jwt.anntation.PassToken;
 import com.dq408.kindergarten.utils.jwt.anntation.UserLoginToken;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -20,6 +21,7 @@ import java.lang.reflect.Method;
 
 /**
  * 新增AuthenticationInterceptor拦截器，在controller访问需要进行token验证的路径则会进行拦截处理
+ * @author XIE_HRZGZ
  */
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
@@ -27,11 +29,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     private UserService userService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
 
         //从http请求头中取出token
         String token = request.getHeader(JwtUtil.HEADER_TOKEN_NAME);
-        System.out.println("token=>:"+token);
         JwtUtil.renewalToken(token);
         //如果不是映射到方法直接通过(不是映射方法指的是没有说明请求路径的方法，如controller中的普通方法)
         if (!(handler instanceof HandlerMethod)) {
@@ -39,7 +40,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();//获取请求的映射方法
+        //获取请求的映射方法
+        Method method = handlerMethod.getMethod();
         //检查映射方法是否有passToken注解，有则跳过认证，判断该请求映射方法上是否有passToken注解
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passToken = method.getAnnotation(PassToken.class);

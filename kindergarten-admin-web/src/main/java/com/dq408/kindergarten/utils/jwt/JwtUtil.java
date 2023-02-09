@@ -17,16 +17,20 @@ import java.util.*;
  */
 public class JwtUtil {
 
+    /**
+     * token小于该时间自动更新
+     */
+    private static final Integer OVER_TIME = 600;
 
     public static final String HEADER_TOKEN_NAME = "X-Admin-Token";
-    /* 秘钥*/
-    static final String SECRET = "Kinder-Token";
-    /* 签名是有谁生成*/
-    static final String ISSUSER = "DQ-B-408";
-    // 签名的主题
-    static final String SUBJECT = "this is kinder token";
-    // 签名的观众
-    static final String AUDIENCE = "ADMINWEBAPP";
+    /** 秘钥*/
+    private static final String SECRET = "Kinder-Token";
+    /** 签名是有谁生成*/
+    private static final String ISSUSER = "DQ-B-408";
+    /**签名的主题*/
+    private static final String SUBJECT = "this is kinder token";
+    /** 签名的观众*/
+    private static final String AUDIENCE = "ADMINWEBAPP";
 
 
 
@@ -38,7 +42,7 @@ public class JwtUtil {
     public static String getToken(Long userId,Date nowDate){
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<>();
             // 过期时间：1小时
             Date expireDate = getAfterDate(nowDate,0,0,0,50,0,0);
             map.put("alg", "HS256");
@@ -126,8 +130,8 @@ public class JwtUtil {
         //将毫秒值化为秒
         long residualTime = (expiresTime - nowTime)/1000;
 
-        System.out.println("当前token剩余："+residualTime+"秒钟过期");
-        if (residualTime <= 600 && residualTime > 0){//token在十分钟内会过期
+        if (residualTime <= OVER_TIME && residualTime > 0){
+            //token在十分钟内会过期
             //解析当前token中的userid
             Long userid = passToken(oldToken);
             //创建新的token

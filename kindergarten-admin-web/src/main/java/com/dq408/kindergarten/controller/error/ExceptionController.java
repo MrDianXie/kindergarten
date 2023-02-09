@@ -72,7 +72,7 @@ public class ExceptionController {
     @RequestMapping("/tokenUserIsAbsent")
     public Map<String,Object> tokenUserIsAbsentException(){
         System.out.println("操作失败：token用户不存在");
-        return AjaxResult.fail(StateCode.TOKEN_USER_ISNUll,"操作失败");
+        return AjaxResult.fail(StateCode.TOKEN_USER_IS_NULL,"操作失败");
     }
 
     @PassToken

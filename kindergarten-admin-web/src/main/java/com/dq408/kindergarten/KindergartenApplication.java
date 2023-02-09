@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
+/**
+ * @author XIE_HRZGZ
+ */
 @MapperScan("com.dq408.kindergarten.dao")
 @SpringBootApplication
 public class KindergartenApplication {

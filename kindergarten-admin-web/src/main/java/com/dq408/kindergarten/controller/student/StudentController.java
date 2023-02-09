@@ -50,15 +50,11 @@ public class StudentController {
             @RequestHeader(JwtUtil.HEADER_TOKEN_NAME) String token,
             Page<Student> pages
     ){
-
         Map<String, Object> data = JwtUtil.renewalToken(token);
         Page<Student> studentPage = studentService.page(pages);
-
         ArrayList<StudentVo> list = new ArrayList<>();
-
-        passPage(studentPage,list);
-
         if (studentPage != null){
+            passPage(studentPage,list);
             data.put("total",studentPage.getTotal());
             data.put("list",list);
             return AjaxResult.success(data);
@@ -85,19 +81,15 @@ public class StudentController {
 
         //更新token
         Map<String, Object> data = JwtUtil.renewalToken(token);
-
         selectKey = selectKey == null ? "" : selectKey;
         //查询学生
         Page<Student> studentPage = studentService.page(new Page<Student>(page, pageSize),
                 new QueryWrapper<Student>()
                         .like("sname", selectKey)
         );
-
         ArrayList<StudentVo> list = new ArrayList<>();
-
-        this.passPage(studentPage,list);
-
         if (studentPage != null){
+            this.passPage(studentPage,list);
             data.put("list",list);
             return AjaxResult.success(data);
         }

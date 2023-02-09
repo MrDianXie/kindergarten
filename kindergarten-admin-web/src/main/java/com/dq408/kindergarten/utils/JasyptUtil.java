@@ -1,5 +1,6 @@
 package com.dq408.kindergarten.utils;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import org.jasypt.util.text.BasicTextEncryptor;
 
 import java.util.Locale;
@@ -17,10 +18,6 @@ public class JasyptUtil {
 
         System.out.println(user);
         System.out.println(pass);
-
-
-
-
     }
 
 }
